@@ -8,7 +8,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from app.api.router import api_router
-from app.api.v1.exceptions.api_exception import ApiException
+from app.api.v1.exceptions.api_exception import ApiError
 from config import Config
 
 config: Config = Config(_env_file=".env")
@@ -30,8 +30,8 @@ async def validation_exception_handler(request: Request, exc: ValidationError):
     )
 
 
-@app.exception_handler(ApiException)
-async def api_exception_handler(request: Request, exc: ApiException):
+@app.exception_handler(ApiError)
+async def api_exception_handler(request: Request, exc: ApiError):
     return JSONResponse(
         status_code=exc.status_code,
         content=jsonable_encoder({"detail": str(exc)}),
