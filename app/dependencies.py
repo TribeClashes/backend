@@ -14,9 +14,9 @@ class Dependency:
         fastapi_app.state.redis = redis
 
     @staticmethod
-    def database(request: Request) -> None:
+    async def database(request: Request) -> None:
         return request.app.state.database
 
     @staticmethod
-    def redis(request: Request) -> Redis:
+    async def redis(request: Request) -> Redis:
         return request.app.state.redis

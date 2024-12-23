@@ -9,7 +9,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from app.api.router import api_router
-from app.api.v1.exceptions.api_exception import ApiError
+from app.api.v1.exceptions.api_error import ApiError
 from app.dependencies import Dependency
 from config import Config
 
