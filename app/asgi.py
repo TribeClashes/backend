@@ -3,12 +3,14 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
+from redis.asyncio import Redis
 from starlette import status
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from app.api.router import api_router
 from app.api.v1.exceptions.api_exception import ApiError
+from app.dependencies import Dependency
 from config import Config
 
 config: Config = Config(_env_file=".env")
@@ -16,7 +18,18 @@ config: Config = Config(_env_file=".env")
 
 @asynccontextmanager
 async def lifespan(fastapi_app: FastAPI):
+    database = None
+    redis: Redis = Redis.from_url(config.redis_dsn.get_secret_value())
+
+    Dependency.inject(
+        fastapi_app,
+        database,
+        redis
+    )
+
     yield
+
+    await redis.aclose()
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(api_router)
