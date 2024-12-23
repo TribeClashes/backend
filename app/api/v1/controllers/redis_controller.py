@@ -28,13 +28,13 @@ class RedisController(AbstractController):
             key: str
     ) -> Any:
         serialized: str = await self.redis.get(f"tribeclashes:{key}")
-        return json.loads(serialized)
+        return json.loads(serialized) if serialized is not None else None
 
     async def _exists(
             self,
             key: str
     ) -> bool:
-        return bool(await self.redis.exists(key))
+        return bool(await self.redis.exists(f"tribeclashes:{key}"))
 
     async def _remove(
             self,
