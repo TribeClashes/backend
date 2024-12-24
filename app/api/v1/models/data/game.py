@@ -1,15 +1,11 @@
+from dataclasses import dataclass
 from typing import Dict, Any
 
 
+@dataclass
 class Game:
-    def __init__(
-            self,
-            chat_id: int,
-            *,
-            is_started: bool | None = None
-    ) -> None:
-        self.chat_id: int = chat_id
-        self.is_started: bool = is_started or False
+    chat_id: int
+    is_started: bool = False
 
     @classmethod
     def from_serialized(
@@ -17,8 +13,8 @@ class Game:
             serialized: Dict[str, Any]
     ) -> 'Game':
         return cls(
-            serialized["chat_id"],
-            is_started=serialized.get("is_started")
+            chat_id=serialized["chat_id"],
+            is_started=serialized["is_started"]
         )
 
     @property
