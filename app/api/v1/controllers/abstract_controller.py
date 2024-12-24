@@ -18,6 +18,13 @@ class AbstractController(ABC):
     ) -> Any: pass
 
     @abstractmethod
+    async def _exists(
+            self,
+            *args: Any,
+            **kwargs: Any
+    ) -> Any: pass
+
+    @abstractmethod
     async def _remove(
             self,
             *args: Any,
